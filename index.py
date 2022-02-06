@@ -22,7 +22,7 @@ def led_toggle(message):
   m = re.search(r"^\/(led)\s?(\w+)", message.text)
   led_name = m.group(2)
   if led_name == "all":
-    all_leds = mongo.db.leds.find({})
+    all_leds = mongo.db.leds.find({}).sort("position")
     all_led_names = "\n".join([str(l["position"]) +". "+ l["name"] for l in all_leds])
     bot.reply_to(message, f"here's a list of all the LEDs\n\n{all_led_names}")
     return
