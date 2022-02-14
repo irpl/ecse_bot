@@ -113,7 +113,6 @@ def led_toggle(message):
 
 @app.route('/api', methods=['POST'])
 def api():
-  print("test")
   if request.headers.get('content-type') == 'application/json':
       json_string = request.get_data().decode('utf-8')
       print(json_string)
@@ -123,6 +122,9 @@ def api():
   else:
       abort(403)
 
+@app.route('/', methods=['GET'])
+def test():
+  return jsonify({"message": "lol"})
 
 if (__name__ == "__main__") and (os.getenv("ENVIRONMENT") == "dev"):
   # app.run(debug=True, port=4010, host="0.0.0.0")
