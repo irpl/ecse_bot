@@ -55,6 +55,7 @@ def add_led(message):
   )
   bot.reply_to(message, f"{user_name} adopted an LED. Its name is \"{led_name}\"")
 
+#! STATE
 TOGGLE_REGEX=r"^\/(led)\s(state)\s(\w+)"
 @bot.message_handler(regexp=TOGGLE_REGEX)
 def toggle_led(message):
@@ -94,6 +95,7 @@ def name_led(message):
   
   bot.reply_to(message, f"your LED's name is now \"{led['name']}\"")
 
+#! COLOUR
 COLOUR_REGEX=r"^\/(led)\s(colour)\s(#(?:[0-9a-fA-F]{3}){1,2}$)"
 @bot.message_handler(regexp=COLOUR_REGEX)
 def colour_led(message):
