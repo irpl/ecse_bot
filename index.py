@@ -44,9 +44,9 @@ def add_led(message):
   mongo.db.leds.insert_one(
     {
       "name": led_name,
-      "colour": "white",
+      "colour": "#ffffff",
       "position": getNextSequence("position"),
-      "state": "on",
+      "state": True,
       "creator": {
         "tele_id": user_id,
         "tele_name": user_name
@@ -55,18 +55,21 @@ def add_led(message):
   )
   bot.reply_to(message, f"{user_name} adopted an LED. Its name is \"{led_name}\"")
 
-TOGGLE_REGEX=r"^\/(led)\s(toggle)\s(\w+)"
+TOGGLE_REGEX=r"^\/(led)\s(state)\s(\w+)"
 @bot.message_handler(regexp=TOGGLE_REGEX)
 def toggle_led(message):
   m = re.search(TOGGLE_REGEX, message.text)
   desired_state = m.group(3)
-
-  if not desired_state in ["on", "off", "pulse"]:
-    bot.reply_to(message, f"try \"on\", \"off\" or \"pulse\"")
+  state_options = {
+    "on": True,
+    "off": False
+  }
+  if not desired_state in state_options:
+    bot.reply_to(message, f"try \"on\" or \"off\"")
     return
 
   user_id = message.from_user.id
-  led = mongo.db.leds.find_one_and_update({"creator.tele_id": user_id}, {"$set": {"state": desired_state}}, return_document=ReturnDocument.AFTER)
+  led = mongo.db.leds.find_one_and_update({"creator.tele_id": user_id}, {"$set": {"state": state_options[desired_state]}}, return_document=ReturnDocument.AFTER)
 
   if led == None:
     bot.reply_to(message, f"you sure you have an LED?")
@@ -90,14 +93,19 @@ def name_led(message):
   
   bot.reply_to(message, f"your LED's name is now \"{led['name']}\"")
 
-COLOUR_REGEX=r"^\/(led)\s(colour)\s(\w+)"
+COLOUR_REGEX=r"^\/(led)\s(colour)\s(#(?:[0-9a-fA-F]{3}){1,2}$)"
 @bot.message_handler(regexp=COLOUR_REGEX)
 def colour_led(message):
   m = re.search(COLOUR_REGEX, message.text)
   desired_colour = m.group(3)
 
+  desired_colour_hex = desired_colour.lstrip('#')
+  hex_len = len(desired_colour_hex)
+  step = int(hex_len/3)
+  rgb = [int(desired_colour_hex[i:i+step], 16) for i in range(0, col_len,step)]
+
   user_id = message.from_user.id
-  led = mongo.db.leds.find_one_and_update({"creator.tele_id": user_id}, {"$set": {"colour": desired_colour}}, return_document=ReturnDocument.AFTER)
+  led = mongo.db.leds.find_one_and_update({"creator.tele_id": user_id}, {"$set": {"colour": rgb}}, return_document=ReturnDocument.AFTER)
 
   if led == None:
     bot.reply_to(message, f"you sure you have an LED?")
