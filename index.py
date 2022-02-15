@@ -46,7 +46,7 @@ def add_led(message):
       "name": led_name,
       "colour": [255,255,255],
       "position": getNextSequence("position"),
-      "state": True,
+      "state": 1,
       "creator": {
         "tele_id": user_id,
         "tele_name": user_name
@@ -61,8 +61,9 @@ def toggle_led(message):
   m = re.search(TOGGLE_REGEX, message.text)
   desired_state = m.group(3)
   state_options = {
-    "on": True,
-    "off": False
+    "on": 1,
+    "off": 2,
+    "blink": 3
   }
   if not desired_state in state_options:
     bot.reply_to(message, f"try \"on\" or \"off\"")
