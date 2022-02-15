@@ -44,7 +44,7 @@ def add_led(message):
   mongo.db.leds.insert_one(
     {
       "name": led_name,
-      "colour": "#ffffff",
+      "colour": [255,255,255],
       "position": getNextSequence("position"),
       "state": True,
       "creator": {
@@ -111,7 +111,7 @@ def colour_led(message):
     bot.reply_to(message, f"you sure you have an LED?")
     return
   
-  bot.reply_to(message, f"your LED, {led['colour']}, should be coloured {led['colour']} now")
+  bot.reply_to(message, f"your LED, {led['name']}, should be coloured {desired_colour} now")
 
 ALL_REGEX = r"^\/(led)\s(all)"
 @bot.message_handler(regexp=ALL_REGEX)
