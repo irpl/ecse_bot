@@ -5,6 +5,8 @@ from flask_pymongo import PyMongo
 from pymongo import ReturnDocument
 import telebot
 from dotenv import load_dotenv
+from bson.json_util import dumps
+from json import loads
 
 load_dotenv()
 
@@ -124,8 +126,10 @@ def api():
 
 @app.route('/', methods=['GET'])
 def test():
-  return jsonify({"message": "lol"})
+  leds = mongo.db.leds.find().sort("position")
+  leds_list = loads(dumps(leds))
+  return jsonify(leds_list)
 
 if (__name__ == "__main__") and (os.getenv("ENVIRONMENT") == "dev"):
-  # app.run(debug=True, port=4010, host="0.0.0.0")
-  bot.infinity_polling()
+  app.run(debug=True, port=4010, host="0.0.0.0")
+  # bot.infinity_polling()
