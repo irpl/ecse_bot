@@ -102,7 +102,7 @@ def colour_led(message):
   desired_colour_hex = desired_colour.lstrip('#')
   hex_len = len(desired_colour_hex)
   step = int(hex_len/3)
-  rgb = [int(desired_colour_hex[i:i+step], 16) for i in range(0, col_len,step)]
+  rgb = [int(desired_colour_hex[i:i+step], 16) for i in range(0, hex_len, step)]
 
   user_id = message.from_user.id
   led = mongo.db.leds.find_one_and_update({"creator.tele_id": user_id}, {"$set": {"colour": rgb}}, return_document=ReturnDocument.AFTER)
