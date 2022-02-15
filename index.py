@@ -124,9 +124,9 @@ def api():
   else:
       abort(403)
 
-@app.route('/', methods=['GET'])
-def test():
-  leds = mongo.db.leds.find({},{"position": 1, "colour": 1, "state": 1}).sort("position")
+@app.route('/embed/leds', methods=['GET'])
+def embed_get_leds():
+  leds = mongo.db.leds.find({},{"position": 1, "colour": 1, "state": 1, "_id": 0}).sort("position")
   leds_list = loads(dumps(leds))
   return jsonify(leds_list)
 
