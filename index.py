@@ -126,7 +126,7 @@ def api():
 
 @app.route('/', methods=['GET'])
 def test():
-  leds = mongo.db.leds.find().sort("position")
+  leds = mongo.db.leds.find({},{"position": 1, "colour": 1, "state": 1}).sort("position")
   leds_list = loads(dumps(leds))
   return jsonify(leds_list)
 
