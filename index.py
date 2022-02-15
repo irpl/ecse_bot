@@ -75,7 +75,7 @@ def toggle_led(message):
     bot.reply_to(message, f"you sure you have an LED?")
     return
   
-  bot.reply_to(message, f"your LED, {led['name']}, should be in the {led['state']} state now")
+  bot.reply_to(message, f"your LED, {led['name']}, should be {desired_state} now")
 
 
 NAME_REGEX=r"^\/(led)\s(name)\s(\w+)"
