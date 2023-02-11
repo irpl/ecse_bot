@@ -20,7 +20,7 @@ bot = telebot.TeleBot(os.getenv("BOT_TOKEN"), threaded=False)
 def send_welcome(message):
 	bot.reply_to(message, "Howdy, how are you doing?")
 
-@bot.message_handler(commands=["venv"])
+@bot.message_handler(commands=["sir"])
 def set_up_venv(message):
   body = """
 when creating a new workspace
