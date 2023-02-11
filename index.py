@@ -1,6 +1,6 @@
 import os
 import re
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, Response
 from flask_pymongo import PyMongo
 from pymongo import ReturnDocument
 import telebot
@@ -20,6 +20,39 @@ bot = telebot.TeleBot(os.getenv("BOT_TOKEN"), threaded=False)
 def send_welcome(message):
 	bot.reply_to(message, "Howdy, how are you doing?")
 
+@bot.message_handler(commands=["venv"])
+def set_up_venv(message):
+  body = """
+when creating a new workspace
+```
+python -m venv venv
+```
+
+activate the venv
+```
+# windows
+. venv/Scripts/activate 
+
+# macOS
+. venv/bin/activate 
+```
+
+installing fastAPI and motor
+```
+pip install "fastapi[all]" motor
+```
+
+start your server application
+```
+uvivorn app:app --reload
+```
+
+stop the server application
+```
+ctrl+c
+```
+  """
+  bot.reply_to(message, body, parse_mode='Markdown')
 def getNextSequence(name):
   ret = mongo.db.counters.find_one_and_update(
     {'_id': name},
@@ -67,7 +100,7 @@ def toggle_led(message):
     "blink": 3
   }
   if not desired_state in state_options:
-    bot.reply_to(message, f"try \"on\" or \"off\"")
+    bot.reply_to(message, f"try \"on\", \"off\" or \"blink\"")
     return
 
   user_id = message.from_user.id
@@ -141,6 +174,10 @@ def embed_get_leds():
   leds_list = loads(dumps(leds))
   return jsonify(leds_list)
 
+@app.route("/deep", methods=["GET"])
+def deep():
+  return Response({"a": "b"}, status=204)
+
 if (__name__ == "__main__") and (os.getenv("ENVIRONMENT") == "dev"):
-  app.run(debug=True, port=4010, host="0.0.0.0")
-  # bot.infinity_polling()
+  # app.run(debug=True, port=4010, host="0.0.0.0")
+  bot.infinity_polling()
