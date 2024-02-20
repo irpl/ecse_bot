@@ -33,7 +33,7 @@ activate the venv
 # windows
 . venv/Scripts/activate 
 
-# macOS
+# macOS/linux
 . venv/bin/activate 
 ```
 
