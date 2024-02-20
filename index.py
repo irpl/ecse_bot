@@ -39,7 +39,7 @@ activate the venv
 
 installing fastAPI and motor
 ```
-pip install "fastapi[all]" motor
+pip install fastapi uvicorn motor python-dotenv
 ```
 
 start your server application
