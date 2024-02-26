@@ -42,6 +42,11 @@ installing fastAPI and motor
 pip install fastapi uvicorn motor python-dotenv
 ```
 
+create a requirements.txt
+```
+pip freeze > requiremtnts.txt
+```
+
 start your server application
 ```
 uvicorn app:app --reload
